@@ -5,6 +5,7 @@ TextureImporter:
     21300000: astronautbody2_0
     21300002: astronautbody2_1
     21300004: astronautbody2_2
+    21300006: astronautbody2_3
   externalObjects: {}
   serializedVersion: 6
   mipmaps:
@@ -123,7 +124,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eb8fc372e7d7dff45a0bc1421390b7f5
+      spriteID: 8659ead599efe914f8a35fb128dda997
       vertices: []
       indices: 
       edges: []
@@ -143,7 +144,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 44e8af7fc54af194180c4191fc89c088
+      spriteID: a72a280a1f2c811438a78c4fbfac6a4f
       vertices: []
       indices: 
       edges: []
@@ -163,7 +164,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 745fc9f16af66724bbb33f2c42e6ecf6
+      spriteID: fce0135b19d5fc547993135f6737281c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: astronautbody2_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66fa20a9fac48b94fbc9594aa04ef345
       vertices: []
       indices: 
       edges: []
