@@ -5,7 +5,7 @@ namespace LD41.Tilemaps
 {
 	[RequireComponent(typeof(MeshRenderer))]
 	[RequireComponent(typeof(MeshFilter))]
-	[RequireComponent(typeof(MeshCollider))]
+	[RequireComponent(typeof(PolygonCollider2D))]
 	public class GraphicTilemap : MonoBehaviour
 	{
 		public float UVTileSize = 0.25f;
@@ -20,13 +20,13 @@ namespace LD41.Tilemaps
 
 		private MeshRenderer _meshRenderer;
 		private MeshFilter _meshFilter;
-		private MeshCollider _meshCollider;
+		private PolygonCollider2D _meshCollider;
 
 		private void OnEnable()
 		{
 			_meshRenderer = GetComponent<MeshRenderer>();
 			_meshFilter = GetComponent<MeshFilter>();
-			_meshCollider = GetComponent<MeshCollider>();
+			_meshCollider = GetComponent<PolygonCollider2D>();
 			IsDirty = true;
 		}
 
@@ -54,8 +54,15 @@ namespace LD41.Tilemaps
 			Mesh mesh = new Mesh();
 
 			List<Vector3> vertices = new List<Vector3>();
+			List<Vector2[]> paths = new List<Vector2[]>();
 			List<int> triangles = new List<int>();
 			List<Vector2> uvs = new List<Vector2>();
+
+			System.Action<Vector2[]> addVertices = v =>
+			{
+				for (int i = 0; i < v.Length; i++) vertices.Add(v[i]);
+				paths.Add(v);
+			};
 
 			int vertOrig;
 			for (int j = 0; j < Height; j++)
@@ -66,10 +73,13 @@ namespace LD41.Tilemaps
 
 					vertOrig = vertices.Count;
 
-					vertices.Add(new Vector3(i, j) * TileSize);
-					vertices.Add(new Vector3(i + 1, j) * TileSize);
-					vertices.Add(new Vector3(i + 1, j + 1) * TileSize);
-					vertices.Add(new Vector3(i, j + 1) * TileSize);
+					addVertices(new Vector2[]
+					{
+						new Vector3(i, j) * TileSize,
+						new Vector3(i + 1, j) * TileSize,
+						new Vector3(i + 1, j + 1) * TileSize,
+						new Vector3(i, j + 1) * TileSize
+					});
 
 					triangles.Add(vertOrig + 0);
 					triangles.Add(vertOrig + 1);
@@ -110,7 +120,10 @@ namespace LD41.Tilemaps
 			mesh.RecalculateNormals();
 
 			_meshFilter.sharedMesh = mesh;
-			_meshCollider.sharedMesh = mesh;
+			_meshCollider.pathCount = paths.Count;
+			int pathI = 0;
+			foreach (var path in paths)
+				_meshCollider.SetPath(pathI++, path);
 		}
 	}
 }

@@ -7,6 +7,26 @@ namespace LD41
 {
 	public class GameManager : MonoBehaviour
 	{
+		#region Singleton
+
+		private static GameManager instance;
+
+		private void MakeSingleton()
+		{
+			if (instance != null && instance != this)
+			{
+				Destroy(this);
+			}
+
+			instance = this;
+		}
+
+		#endregion
+
+		// If true we are paused
+		public bool IsPaused { get; private set; }
+		public static bool IsGamePaused => instance.IsPaused;
+
 		public Object RoomPrefab;
 
 		private MetroidCamera _camera;
@@ -15,6 +35,11 @@ namespace LD41
 		private Dictionary<Vector2Int, Room> _rooms = new Dictionary<Vector2Int, Room>();
 		private Room _currentRoom;
 
+		private void Awake()
+		{
+			MakeSingleton();
+		}
+
 		private void OnEnable()
 		{
 			_camera = FindObjectOfType<MetroidCamera>();
@@ -22,6 +47,10 @@ namespace LD41
 			InitializeObjectPools();
 			Reset();
 			NewLevel();
+		}
+
+		private void Start()
+		{
 			GotoRoom(_rooms[Vector2Int.zero]);
 
 			foreach (var room in _rooms)
