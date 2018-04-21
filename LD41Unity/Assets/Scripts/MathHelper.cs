@@ -2,6 +2,11 @@
 
 namespace LD41
 {
+	public static class CONST
+	{
+		public const float PIXELS_PER_UNIT = 64;
+	}
+
 	public static class MathHelper
 	{
 		public static Vector2 RotateVector(this Vector2 vec, float degrees)

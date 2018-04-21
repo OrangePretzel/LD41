@@ -11,6 +11,11 @@ namespace LD41.Tilemaps
 		}
 
 		public TileTypes Type;
+
+		public LevelTile(TileTypes type)
+		{
+			Type = type;
+		}
 	}
 
 	public struct SpriteWithTransform
@@ -43,46 +48,15 @@ namespace LD41.Tilemaps
 		private void OnEnable()
 		{
 			_graphicTilemap = GetComponent<GraphicTilemap>();
-			Init();
 		}
 
-		private void FixedUpdate()
-		{
-			Render();
-		}
-
-		public void Init()
-		{
-			string LEVEL = @"
-XXXXXXXXXXXXXXXX
-X..............X
-X..............X
-X..............X
-XXXXX.XX.......X
-X......XX......X
-X.XX...........X
-X.XXXX..X.XXX..X
-X..XXX..X.X....X
-X..XXX..XXXXX..X
-X.........X.X..X
-XXXXX...XXX.X..X
-X...XX..XX.....X
-X...XX..XX..X..X
-X...XX.........X
-XXXXXXXXXXXXXXXX
-".Replace("\n", "").Replace("\r", "");
-
-
+		public void Init(int width, int height)
+		{			
 			_graphicTilemap.Init();
-			LevelTiles = new LevelTile[16, 16];
+			LevelTiles = new LevelTile[width, height];
 			for (int j = 0; j < Height; j++)
 				for (int i = 0; i < Width; i++)
-				{
-					LevelTiles[i, j] = new LevelTile()
-					{
-						Type = LEVEL[j * 16 + i] == 'X' ? LevelTile.TileTypes.Wall : LevelTile.TileTypes.None
-					};
-				}
+					LevelTiles[i, j] = new LevelTile(LevelTile.TileTypes.None);
 		}
 
 		public void Render()

@@ -8,7 +8,8 @@ namespace LD41.Tilemaps
 	[RequireComponent(typeof(MeshCollider))]
 	public class GraphicTilemap : MonoBehaviour
 	{
-		public float TileSize = 0.25f;
+		public float UVTileSize = 0.25f;
+		public float TileSize = CONST.PIXELS_PER_UNIT;
 
 		private GraphicTile[,] _tiles;
 		public GraphicTile[,] Tiles => _tiles;
@@ -65,10 +66,10 @@ namespace LD41.Tilemaps
 
 					vertOrig = vertices.Count;
 
-					vertices.Add(new Vector3(i, j));
-					vertices.Add(new Vector3(i + 1, j));
-					vertices.Add(new Vector3(i + 1, j + 1));
-					vertices.Add(new Vector3(i, j + 1));
+					vertices.Add(new Vector3(i, j) * TileSize);
+					vertices.Add(new Vector3(i + 1, j) * TileSize);
+					vertices.Add(new Vector3(i + 1, j + 1) * TileSize);
+					vertices.Add(new Vector3(i, j + 1) * TileSize);
 
 					triangles.Add(vertOrig + 0);
 					triangles.Add(vertOrig + 1);
@@ -77,10 +78,10 @@ namespace LD41.Tilemaps
 					triangles.Add(vertOrig + 2);
 					triangles.Add(vertOrig + 3);
 
-					var uv1 = new Vector2(TileSize * tile.GraphicX, TileSize * tile.GraphicY);
-					var uv2 = new Vector2(TileSize * tile.GraphicX + TileSize, TileSize * tile.GraphicY);
-					var uv3 = new Vector2(TileSize * tile.GraphicX + TileSize, TileSize * tile.GraphicY + TileSize);
-					var uv4 = new Vector2(TileSize * tile.GraphicX, TileSize * tile.GraphicY + TileSize);
+					var uv1 = new Vector2(UVTileSize * tile.GraphicX, UVTileSize * tile.GraphicY);
+					var uv2 = new Vector2(UVTileSize * tile.GraphicX + UVTileSize, UVTileSize * tile.GraphicY);
+					var uv3 = new Vector2(UVTileSize * tile.GraphicX + UVTileSize, UVTileSize * tile.GraphicY + UVTileSize);
+					var uv4 = new Vector2(UVTileSize * tile.GraphicX, UVTileSize * tile.GraphicY + UVTileSize);
 
 					switch (tile.Rotation)
 					{
