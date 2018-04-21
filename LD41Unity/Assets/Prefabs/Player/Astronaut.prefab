@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf963e37a25ad14da1903e307290655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotationPerSecond: 200
+  RotationPerSecond: 300
   AccelerationPerSecond: 0.5
   MaxSpeed: 4
 --- !u!198 &198510034080450808
@@ -328,7 +328,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1055657677641348}
   serializedVersion: 5
-  lengthInSec: 5
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   looping: 1
@@ -400,7 +400,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 0.25
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -453,7 +453,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 50
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -569,7 +569,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -885,7 +885,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 400
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -945,13 +945,13 @@ ParticleSystem:
     serializedVersion: 5
     enabled: 1
     type: 4
-    angle: 25
+    angle: 90
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: 0, y: 0, z: -110}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -1032,7 +1032,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 360
+      value: 30
       mode: 0
       spread: 0
       speed:
@@ -1094,7 +1094,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1524,7 +1524,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -1532,8 +1532,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
+        key0: {r: 0.98039216, g: 0.8968841, b: 0.0705882, a: 1}
+        key1: {r: 1, g: 0.20377716, b: 0.0047169924, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
