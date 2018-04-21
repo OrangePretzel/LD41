@@ -1,11 +1,11 @@
 # [Ludum Dare 41 (Jam)](https://ldjam.com/events/ludum-dare/41/)
 
 Team:
-- **SevenSidedVoxel**
-- **Maboroshi2D**
+- [**SevenSidedVoxel**](https://github.com/sevensidedvoxel)
+- [**Maboroshi2D**](https://github.com/maboroshi2d)
 
 Theme:
-**TBA**
+**Combine 2 Incompatible Genres**
 
 Tools:
 - Game Engine: [Unity](https://unity3d.com/)
