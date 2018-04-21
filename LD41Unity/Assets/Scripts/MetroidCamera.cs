@@ -14,8 +14,8 @@ namespace LD41
 
 		public void TransitionToRoom(Room room)
 		{
-			transform.position = room.transform.position + new Vector3(room.LevelTileMap.Width * CONST.PIXELS_PER_UNIT / 4, room.LevelTileMap.Height * CONST.PIXELS_PER_UNIT / 4, transform.position.z);
-			_camera.orthographicSize = room.LevelTileMap.Width / 4 * CONST.PIXELS_PER_UNIT;
+			transform.position = room.transform.position + new Vector3(20 * CONST.PIXELS_PER_UNIT / 4, 16 * CONST.PIXELS_PER_UNIT / 4, transform.position.z);
+			_camera.orthographicSize = 20 / 4 * CONST.PIXELS_PER_UNIT;
 		}
 	}
 }

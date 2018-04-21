@@ -9,6 +9,8 @@ namespace LD41
 		public Vector2Int?[] DoorPositions = new Vector2Int?[4];
 		public LevelTileMap LevelTileMap;
 
+		public DetailedRoomInfo DetailedRoomInfo;
+
 		private void OnEnable()
 		{
 			LevelTileMap = GetComponentInChildren<LevelTileMap>();
@@ -26,20 +28,22 @@ namespace LD41
 
 		public void Init(int width, int height)
 		{
-			LevelTileMap.Init(width, height);
-			DoorPositions = new Vector2Int?[4];
+			LevelTileMap.Init();
 			LevelTileMap.gameObject.SetActive(false);
 		}
 
 		public void DeactivateRoom()
 		{
-			LevelTileMap.gameObject.SetActive(false);
+			//LevelTileMap.gameObject.SetActive(false);
 		}
 
 		public void ActivateRoom()
 		{
-			LevelTileMap.gameObject.SetActive(true);
-			LevelTileMap.Render();
+			if (DetailedRoomInfo == null) throw new System.Exception("blargons are not set");
+			//LevelTileMap.gameObject.SetActive(true);
+			LevelTileMap.Render(DetailedRoomInfo.RoomLayout);
 		}
+
+		public void SetRoomInfo(DetailedRoomInfo roomInfo) => DetailedRoomInfo = roomInfo;
 	}
 }

@@ -2,22 +2,6 @@
 
 namespace LD41.Tilemaps
 {
-	public class LevelTile
-	{
-		public enum TileTypes
-		{
-			None,
-			Wall
-		}
-
-		public TileTypes Type;
-
-		public LevelTile(TileTypes type)
-		{
-			Type = type;
-		}
-	}
-
 	public struct SpriteWithTransform
 	{
 		public int SpritePosition;
@@ -39,10 +23,6 @@ namespace LD41.Tilemaps
 	[RequireComponent(typeof(GraphicTilemap))]
 	public class LevelTileMap : MonoBehaviour
 	{
-		public LevelTile[,] LevelTiles;
-		public int Width => LevelTiles.GetLength(0);
-		public int Height => LevelTiles.GetLength(1);
-
 		private GraphicTilemap _graphicTilemap;
 
 		private void OnEnable()
@@ -50,18 +30,14 @@ namespace LD41.Tilemaps
 			_graphicTilemap = GetComponent<GraphicTilemap>();
 		}
 
-		public void Init(int width, int height)
+		public void Init()
 		{			
 			_graphicTilemap.Init();
-			LevelTiles = new LevelTile[width, height];
-			for (int j = 0; j < Height; j++)
-				for (int i = 0; i < Width; i++)
-					LevelTiles[i, j] = new LevelTile(LevelTile.TileTypes.None);
 		}
 
-		public void Render()
+		public void Render(LevelTile[,] levelTiles)
 		{
-			_graphicTilemap.SetTiles(CalculateTiles(LevelTiles));
+			_graphicTilemap.SetTiles(CalculateTiles(levelTiles));
 			_graphicTilemap.IsDirty = true;
 			_graphicTilemap.Render();
 		}

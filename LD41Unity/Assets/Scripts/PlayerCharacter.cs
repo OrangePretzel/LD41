@@ -22,7 +22,6 @@ namespace LD41
 
 		private void Update()
 		{
-			Debug.Log(_rigidbody.velocity);
 			if (GameManager.IsGamePaused) return;
 
 			// Get input associated with the player's controller
@@ -31,7 +30,7 @@ namespace LD41
 			if (playerInput.HorizontalMovement != 0)
 			{
 				_rigidbody.angularVelocity = 0;
-				var amountToRotate = -playerInput.HorizontalMovement * RotationPerSecond;
+				var amountToRotate = -playerInput.HorizontalMovement * RotationPerSecond * Time.deltaTime;
 				var newAngle = transform.localRotation.eulerAngles.z + amountToRotate;
 				transform.localRotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
 			}
