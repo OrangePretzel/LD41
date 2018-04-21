@@ -44,7 +44,7 @@ namespace LD41.Tilemaps
 		private void FixedUpdate()
 		{
 			frame += Time.deltaTime;
-			if (frame >= 1)
+			if (frame >= 2)
 			{
 				frame = 0;
 				Tiles[0, 0].GraphicX = (Tiles[0, 0].GraphicX + 1) % 4;
