@@ -18,13 +18,11 @@ namespace LD41.Tilemaps
 		public int Height => _tiles.GetLength(1);
 		public bool IsDirty;
 
-		private MeshRenderer _meshRenderer;
 		private MeshFilter _meshFilter;
 		private PolygonCollider2D _meshCollider;
 
 		private void OnEnable()
 		{
-			_meshRenderer = GetComponent<MeshRenderer>();
 			_meshFilter = GetComponent<MeshFilter>();
 			_meshCollider = GetComponent<PolygonCollider2D>();
 			IsDirty = true;

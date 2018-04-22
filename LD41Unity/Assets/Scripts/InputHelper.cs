@@ -230,6 +230,7 @@ Player 4:
 			playerInput.VerticalAim = Input.mousePosition.y;
 
 			playerInput.Jump = Input.GetKey(KeyCode.W);
+			playerInput.Shooting = Input.GetKey(KeyCode.Mouse0);
 
 			var menuDown = Input.GetKey(KeyCode.Escape);
 			playerInput.Menu = !WasMenuDown && menuDown;
@@ -258,7 +259,8 @@ Player 4:
 			playerInput.HorizontalAim = inputDevice.RightStick.X;
 			playerInput.VerticalAim = inputDevice.RightStick.Y;
 
-			playerInput.Jump = inputDevice.Action1.IsPressed;
+			playerInput.Jump = inputDevice.LeftTrigger.IsPressed;
+			playerInput.Shooting = inputDevice.RightTrigger.IsPressed;
 
 			playerInput.Menu = inputDevice.Command.WasPressed;
 			playerInput.Select = inputDevice.Action1.WasPressed;
@@ -277,6 +279,7 @@ Player 4:
 		public float VerticalAim;
 
 		public bool Jump;
+		public bool Shooting;
 
 		public bool Menu;
 		public bool Select;
@@ -290,6 +293,7 @@ Player 4:
 			var aimVec = (screenCamera.ScreenToWorldPoint(new Vector3(HorizontalAim, VerticalAim)) - originPoint);
 			aimVec.z = 0;
 			aimVec = aimVec.normalized;
+			Debug.Log($"Normalized Aim Vector = {aimVec}");
 			return aimVec;
 		}
 
@@ -300,6 +304,7 @@ Input Device: ({PlayerDevice})
 Movement: ({HorizontalMovement}, {VerticalMovement})
 Aim: ({HorizontalAim}, {VerticalAim})
 Jump: ({Jump})
+Shooting: ({Shooting})
 Menu: ({Menu})
 Select: ({Select})
 Back: ({Back})";

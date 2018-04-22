@@ -10,6 +10,7 @@ namespace LD41
 		#region Singleton
 
 		private static GameManager instance;
+		public static GameManager Instance => instance;
 
 		private void MakeSingleton()
 		{
@@ -23,11 +24,16 @@ namespace LD41
 
 		#endregion
 
+		[SerializeField]
+		private List<PlayerCharacter> Players;
+
 		// If true we are paused
 		public bool IsPaused { get; private set; }
 		public static bool IsGamePaused => instance.IsPaused;
 
 		public Object RoomPrefab;
+		public Object EnemyPrefab;
+		public Object BulletPrefab;
 
 		private MetroidCamera _camera;
 
@@ -36,6 +42,9 @@ namespace LD41
 		private ObjectPool _roomPool;
 		private List<Room> _roomsObjects = new List<Room>();
 		private Room _currentRoom;
+
+		private ObjectPool _projectilePool;
+		private ObjectPool _enemyPool;
 
 		private void Awake()
 		{
@@ -69,6 +78,40 @@ namespace LD41
 				return poolable;
 			});
 			_roomPool.AllocateObjects(14);
+
+			var projectilePoolObject = new GameObject("Projectile Object Pool");
+			_projectilePool = projectilePoolObject.AddComponent<ObjectPool>();
+			_projectilePool.SetAllocationFunction(() =>
+			{
+				var gObj = (GameObject)Instantiate(BulletPrefab, _projectilePool.transform);
+				gObj.name = "Projectile Object";
+				var poolable = gObj.GetComponent<IPoolableObject>();
+				poolable.ReturnToPool();
+				return poolable;
+			});
+			_projectilePool.AllocateObjects(50);
+
+			var enemyPoolObject = new GameObject("Enemy Object Pool");
+			_enemyPool = enemyPoolObject.AddComponent<ObjectPool>();
+			_enemyPool.SetAllocationFunction(() =>
+			{
+				var gObj = (GameObject)Instantiate(EnemyPrefab, _enemyPool.transform);
+				gObj.name = "Enemy Object";
+				var poolable = gObj.GetComponent<IPoolableObject>();
+				poolable.ReturnToPool();
+				return poolable;
+			});
+			_enemyPool.AllocateObjects(30);
+		}
+
+		public IPoolableObject GetBullet()
+		{
+			return _projectilePool.GetObjectFromPool();
+		}
+
+		public void ReturnBullet(IPoolableObject bullet)
+		{
+			_projectilePool.ReturnObjectToPool(bullet);
 		}
 
 		public void ResetGame()
@@ -86,18 +129,34 @@ namespace LD41
 			foreach (var roomInfo in _roomInfos)
 			{
 				var roomObj = (Room)_roomPool.GetObjectFromPool();
+				roomObj.name = $"Room ({roomInfo.RoomType}) at {roomInfo.Position}";
 				var detailedRoomInfo = RoomGenerator.GenerateRoom(roomInfo);
 				roomObj.SetRoomInfo(detailedRoomInfo);
+				roomObj.DeactivateRoom();
 				_roomsObjects.Add(roomObj);
 			}
+		}
+
+		public Enemy GetEnemy()
+		{
+			return (Enemy)_enemyPool.GetObjectFromPool();
+		}
+
+		public void ReturnEnemy(Enemy e)
+		{
+			_enemyPool.ReturnObjectToPool(e);
 		}
 
 		public void LoadRoom(Room room)
 		{
 			_currentRoom?.DeactivateRoom();
 			_currentRoom = room;
-			_currentRoom?.ActivateRoom();
+			_currentRoom.ActivateRoom();
 			_camera.TransitionToRoom(room);
+			foreach (var player in Players)
+			{
+				player.transform.position = room.RoomCenter;
+			}
 		}
 	}
 }
