@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 58672189762879366}
   - component: {fileID: 50249982330438634}
   - component: {fileID: 114815834441776260}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Blorglet
   m_TagString: BadBoy
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4832051729622094}
   - component: {fileID: 212819388314781500}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: astronautbody2_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

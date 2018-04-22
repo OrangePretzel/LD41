@@ -166,10 +166,7 @@ namespace LD41
 					var tile = new LevelTile(LevelTile.TileTypes.None);
 					if (IsBoundary(i, j))
 					{
-						if (IsDoorPosition(i, j))
-							tile.Type = LevelTile.TileTypes.Door;
-						else
-							tile.Type = LevelTile.TileTypes.Wall;
+						tile.Type = LevelTile.TileTypes.Wall;
 					}
 					else
 					{

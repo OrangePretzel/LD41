@@ -48,9 +48,9 @@ namespace LD41
 			//LevelTileMap.gameObject.SetActive(true);
 			LevelTileMap.Render(DetailedRoomInfo.RoomLayout);
 
-			if (DetailedRoomInfo.RoomInfo.RoomType == RoomInfo.RoomTypes.Start)
-				Unlock();
-			else
+			//if (DetailedRoomInfo.RoomInfo.RoomType == RoomInfo.RoomTypes.Start)
+			//	Unlock();
+			//else
 				Lock();
 		}
 

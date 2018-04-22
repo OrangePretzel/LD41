@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BadBoy
   - PlayerBoy
+  - shooties
   layers:
   - Default
   - TransparentFX

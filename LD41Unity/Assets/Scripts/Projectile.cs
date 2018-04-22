@@ -7,6 +7,8 @@ namespace LD41
 	{
 		private Rigidbody2D _rigidbody;
 
+		public PlayerCharacter Player;
+
 		private void OnEnable()
 		{
 			_rigidbody = GetComponent<Rigidbody2D>();
@@ -35,9 +37,14 @@ namespace LD41
 				badboy.Die();
 				GameManager.Instance.ReturnBullet(this);
 			}
-			else if (collision.gameObject.tag == "PlayerBoy")
+			else if (collision.gameObject == Player.gameObject)
 			{
 				// Ignore
+			}
+			else if(collision.gameObject.tag == "PlayerBoy")
+			{
+				collision.gameObject.GetComponent<PlayerCharacter>().TakeDamageFrom(Player);
+				GameManager.Instance.ReturnBullet(this);
 			}
 			else
 			{

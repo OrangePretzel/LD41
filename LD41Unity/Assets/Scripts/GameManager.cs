@@ -1,4 +1,4 @@
-﻿using LD41.Tilemaps;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -63,6 +63,24 @@ namespace LD41
 		private void Start()
 		{
 			LoadRoom(_roomsObjects.First(r => r.DetailedRoomInfo.RoomInfo.RoomType == RoomInfo.RoomTypes.Start));
+		}
+
+		public void AddScoreFor(PlayerCharacter murderer)
+		{
+			Debug.Log($"{murderer.name} is a murderer! +1");
+		}
+
+		public IEnumerator RespawnPlayerAfterDelay(PlayerCharacter playerToRespawn)
+		{
+			yield return new WaitForSeconds(2.0f);
+			playerToRespawn.transform.position = _currentRoom.RoomCenter;
+			playerToRespawn.CurrentHealth = playerToRespawn.MaxHealth;
+			playerToRespawn.gameObject.SetActive(true);
+		}
+
+		public void RespawnPlayer(PlayerCharacter playerToRespawn)
+		{
+			StartCoroutine(RespawnPlayerAfterDelay(playerToRespawn));
 		}
 
 		private void InitializeObjectPools()

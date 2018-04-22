@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 58010174436451678}
   - component: {fileID: 50598332687705968}
   - component: {fileID: 114909541299806410}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: shooties
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,7 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4955458023015824}
   - component: {fileID: 212822730315470412}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tower1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c44bbed24c4e2934e8a5387aa36ef4ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 0}
 --- !u!212 &212822730315470412
 SpriteRenderer:
   m_ObjectHideFlags: 1

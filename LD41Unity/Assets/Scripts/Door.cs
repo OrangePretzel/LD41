@@ -17,14 +17,14 @@ namespace LD41
 
 		public void OpenDoor()
 		{
-			_animator.SetBool("closed", false);
-			_collider.enabled = false;
+			//_animator.SetBool("closed", false);
+			//_collider.enabled = false;
 		}
 
 		public void CloseDoor()
 		{
-			_animator.SetBool("closed", true);
-			_collider.enabled = true;
+			//_animator.SetBool("closed", true);
+			//_collider.enabled = true;
 		}
 	}
 }

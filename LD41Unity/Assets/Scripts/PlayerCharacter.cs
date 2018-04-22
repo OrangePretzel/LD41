@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace LD41
 {
@@ -22,17 +23,49 @@ namespace LD41
 		private PlayerInput playerInput;
 
 		private Rigidbody2D _rigidbody;
-		private ParticleSystem _particleSystem;
+		[SerializeField]
+		private ParticleSystem ParticleSystem;
 		private Animator _animator;
+
+		[SerializeField]
+		private Image HPBar;
+
+		[SerializeField]
+		private Image AimBar;
 
 		public float ShotCoolDown = 0.5f;
 		private float _lastShot = 0;
 
+		public float MaxHealth = 10;
+		public float CurrentHealth = 10;
+
 		private void OnEnable()
 		{
 			_rigidbody = GetComponent<Rigidbody2D>();
-			_particleSystem = GetComponentInChildren<ParticleSystem>();
 			_animator = GetComponent<Animator>();
+			UpdateHealthBar();
+		}
+
+		public void TakeDamageFrom(PlayerCharacter damageCauser)
+		{
+			CurrentHealth--;
+			UpdateHealthBar();
+			if (CurrentHealth <= 0)
+			{
+				Die(damageCauser);
+			}
+		}
+
+		public void Die(PlayerCharacter murderer)
+		{
+			GameManager.Instance.AddScoreFor(murderer);
+			GameManager.Instance.RespawnPlayer(this);
+			gameObject.SetActive(false);
+		}
+
+		public void UpdateHealthBar()
+		{
+			HPBar.rectTransform.localScale = new Vector3(CurrentHealth / (float)MaxHealth, 1, 1);
 		}
 
 		private void Update()
@@ -63,7 +96,7 @@ namespace LD41
 
 				_rigidbody.velocity = velocity;
 
-				_particleSystem.Emit(1);
+				ParticleSystem.Emit(1);
 				_animator.SetBool("moving", true);
 			}
 			else
@@ -96,7 +129,25 @@ namespace LD41
 					var bullet = (Projectile)GameManager.Instance.GetBullet();
 					bullet.transform.position = ShootiePoint.position;
 					bullet.SetDir(GunArmSprite.transform.right);
+					bullet.Player = this;
 				}
+			}
+
+			// Aim Bar
+			var hits = Physics2D.RaycastAll(ShootiePoint.position, GunArmSprite.transform.right, 300);
+			if(hits.Length >0)
+			foreach (var hit in hits)
+			{
+				if (hit.collider.gameObject == this.gameObject) continue;
+				if (hit.collider.gameObject.tag == "shooties") continue;
+
+				var hitDist = hit.distance;
+				AimBar.rectTransform.localScale = new Vector3(hitDist / 300f, 1, 1);
+				break;
+			}
+			else
+			{
+				AimBar.rectTransform.localScale = new Vector3(1, 1, 1);
 			}
 		}
 	}
