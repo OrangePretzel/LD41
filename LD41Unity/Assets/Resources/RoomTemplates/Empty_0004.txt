@@ -1,0 +1,16 @@
+XXXXXXXXXXXXXXXXXXXX
+XX.......XX.......XX
+XXX..@...XX...@..XXX
+XXXX............XXXX
+XXXXX..........XXXXX
+X........@.........X
+X..................X
+X......XXXXXX...@..X
+X..@...XXXXXX......X
+X..................X
+X..................X
+XXXXX.....@....XXXXX
+XXXX............XXXX
+XXX..@...XX...@..XXX
+XX.......XX.......XX
+XXXXXXXXXXXXXXXXXXXX
