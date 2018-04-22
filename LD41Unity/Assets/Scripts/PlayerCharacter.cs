@@ -134,7 +134,7 @@ namespace LD41
 			}
 
 			// Aim Bar
-			var hits = Physics2D.RaycastAll(ShootiePoint.position, GunArmSprite.transform.right, 300);
+			var hits = Physics2D.RaycastAll(ShootiePoint.position, GunArmSprite.transform.right, 1000);
 			if(hits.Length >0)
 			foreach (var hit in hits)
 			{
@@ -142,7 +142,7 @@ namespace LD41
 				if (hit.collider.gameObject.tag == "shooties") continue;
 
 				var hitDist = hit.distance;
-				AimBar.rectTransform.localScale = new Vector3(hitDist / 300f, 1, 1);
+				AimBar.rectTransform.localScale = new Vector3(hitDist / 1000f, 1, 1);
 				break;
 			}
 			else
