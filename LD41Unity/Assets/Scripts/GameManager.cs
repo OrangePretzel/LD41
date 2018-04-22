@@ -11,23 +11,28 @@ namespace LD41
 		{
 			public bool[] PlayersEnabled;
 			public int[] PlayerTeams;
+			public int MapIndex;
 		}
 		public GameSettings GamSetts;
+		private List<string> AllMaps = new List<string>();
 
 		public enum GameState
 		{
 			MainMenu,
 			Paused,
 			Playing,
-			CharSel
+			CharSel,
+			GamSetties
 		}
 
 		public Canvas MainMenu;
 		public Canvas CharSelect;
+		public Canvas GamSettiesScreen;
 		public Canvas GameUI;
 		public Canvas PauseMenu;
 
 		public Button StartButt;
+		public Text MapName;
 
 		public PlayerIcon[] PIcons;
 		public Vector3[] PIconTeamLocations;
@@ -82,10 +87,12 @@ namespace LD41
 		private void Awake()
 		{
 			MakeSingleton();
+			LoadMaps();
 
 			GamSetts = new GameSettings();
 			GamSetts.PlayersEnabled = new bool[4];
 			GamSetts.PlayerTeams = new int[4];
+			GamSetts.MapIndex = 0;
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -94,6 +101,48 @@ namespace LD41
 			}
 
 			UpdatePlayerIcons();
+		}
+
+		public void LoadMaps()
+		{
+			AllMaps = new List<string>()
+			{
+				"Delicious_Absorb",
+				"Knowledgeable_Telling",
+				"Macho_Pen",
+				"Maddening_Round",
+				"Pathetic_Tumble",
+				"Powerful_Sun",
+				"Snake_Pinch",
+				"Substantial_Swim",
+				"Succinct_Applicance",
+				"Tough_Drip"
+			};
+		}
+
+		private float lastSwticheriodus = 0;
+		public float SwticheriodusDelay = 0.25f;
+
+		public void NextMap()
+		{
+			if (!(Time.unscaledTime - lastSwticheriodus > SwticheriodusDelay)) return;
+			GamSetts.MapIndex = (GamSetts.MapIndex + 1) % AllMaps.Count;
+			lastSwticheriodus = Time.unscaledTime;
+		}
+
+		public void PreviousMap()
+		{
+			if (!(Time.unscaledTime - lastSwticheriodus > SwticheriodusDelay)) return;
+			var prev = GamSetts.MapIndex - 1;
+			if (prev < 0)
+				prev = AllMaps.Count - 1;
+			GamSetts.MapIndex = prev % AllMaps.Count;
+			lastSwticheriodus = Time.unscaledTime;
+		}
+
+		public void UpdateGameSettyScreen()
+		{
+			MapName.text = AllMaps[GamSetts.MapIndex].Replace("_", " ");
 		}
 
 		public void UpdatePlayerIcons()
@@ -155,6 +204,20 @@ namespace LD41
 			ChangeState(GameState.MainMenu);
 		}
 
+		private void OnDrawGizmos()
+		{
+			if (_gameState == GameState.Playing)
+			{
+				foreach (var spawn in CurrentRoom.DetailedRoomInfo.Spawns)
+				{
+					Gizmos.DrawSphere(CurrentRoom.transform.position + (Vector3)((Vector2)spawn) * CONST.PIXELS_PER_UNIT / 2, 5f);
+				}
+			}
+			Gizmos.color = Color.red;
+			Gizmos.DrawSphere(CurrentRoom.RoomCenter, 1f);
+			Gizmos.color = Color.white;
+		}
+
 		private void Update()
 		{
 			if (_gameState == GameState.CharSel)
@@ -205,6 +268,15 @@ namespace LD41
 				UpdatePlayerIcons();
 				StartButt.interactable = VerifySettings();
 			}
+			else if (_gameState == GameState.GamSetties)
+			{
+				UpdateGameSettyScreen();
+			}
+		}
+
+		public void GotoGameSetties()
+		{
+			ChangeState(GameState.GamSetties);
 		}
 
 		public void Quit()
@@ -284,6 +356,7 @@ namespace LD41
 			MainMenu.gameObject.SetActive(_gameState == GameState.MainMenu);
 			CharSelect.gameObject.SetActive(_gameState == GameState.CharSel);
 			GameUI.gameObject.SetActive(_gameState == GameState.Playing);
+			GamSettiesScreen.gameObject.SetActive(_gameState == GameState.GamSetties);
 			PauseMenu.gameObject.SetActive(_gameState == GameState.Paused);
 		}
 
@@ -392,7 +465,7 @@ namespace LD41
 		public void NewLevel()
 		{
 			RoomInfo roomInfo = new RoomInfo(RoomInfo.RoomTypes.Normal, Vector2Int.zero);
-			var detailedRoomInfo = RoomGenerator.GenerateRoom(roomInfo);
+			var detailedRoomInfo = RoomGenerator.GenerateRoom(roomInfo, AllMaps[GamSetts.MapIndex]);
 			CurrentRoom.SetRoomInfo(detailedRoomInfo);
 			CurrentRoom.ActivateRoom();
 			_camera.TransitionToRoom(CurrentRoom);
@@ -400,10 +473,14 @@ namespace LD41
 
 		public void SpawnPlayerOnTeam(int playerID, int teamID)
 		{
+			Vector2 spawnPos = CurrentRoom.DetailedRoomInfo.Spawns[Random.Range(0, CurrentRoom.DetailedRoomInfo.Spawns.Count)];
+			spawnPos *= CONST.PIXELS_PER_UNIT / 2;
+			spawnPos += new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+
 			var player = (PlayerCharacter)_playerPool.GetObjectFromPool();
 			player.name = $"Player for Team {teamID}";
 			player.SetInfo(playerID, teamID, TeamColors[teamID]);
-			player.transform.position = CurrentRoom.RoomCenter;
+			player.transform.position = (Vector3)spawnPos + CurrentRoom.transform.position;
 			player.CurrentHealth = player.MaxHealth;
 			Players.Add(player);
 		}
