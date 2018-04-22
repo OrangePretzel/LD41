@@ -293,7 +293,6 @@ Player 4:
 			var aimVec = (screenCamera.ScreenToWorldPoint(new Vector3(HorizontalAim, VerticalAim)) - originPoint);
 			aimVec.z = 0;
 			aimVec = aimVec.normalized;
-			Debug.Log($"Normalized Aim Vector = {aimVec}");
 			return aimVec;
 		}
 

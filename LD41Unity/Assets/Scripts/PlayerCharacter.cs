@@ -6,7 +6,7 @@ namespace LD41
 	[RequireComponent(typeof(Rigidbody2D))]
 	[RequireComponent(typeof(Collider2D))]
 	[RequireComponent(typeof(Animator))]
-	public class PlayerCharacter : MonoBehaviour
+	public class PlayerCharacter : MonoBehaviour, IPoolableObject
 	{
 		[SerializeField]
 		private SpriteRenderer GunArmSprite;
@@ -20,6 +20,7 @@ namespace LD41
 		public float MaxSpeed = 2;
 
 		public int PlayerID = 0;
+		public int TeamID = 0;
 		private PlayerInput playerInput;
 
 		private Rigidbody2D _rigidbody;
@@ -38,6 +39,17 @@ namespace LD41
 
 		public float MaxHealth = 10;
 		public float CurrentHealth = 10;
+
+		public void SetInfo(int playerID, int teamID, Color teamColor)
+		{
+			PlayerID = playerID;
+			TeamID = teamID;
+
+			var customColor = ((playerID / 4f) * 0.25f + 0.75f) * teamColor;
+
+			BodySprite.color = customColor;
+			gameObject.layer = LayerMask.NameToLayer($"team{TeamID}");
+		}
 
 		private void OnEnable()
 		{
@@ -111,6 +123,7 @@ namespace LD41
 					bullet.SetDir(GunArmSprite.transform.right);
 					bullet.Player = this;
 					_rigidbody.velocity += (Vector2)GunArmSprite.transform.right * -CONST.PIXELS_PER_UNIT;
+					bullet.gameObject.layer = gameObject.layer;
 
 				}
 			}
@@ -152,6 +165,18 @@ namespace LD41
 			{
 				AimBar.rectTransform.localScale = new Vector3(1, 1, 1);
 			}
+		}
+
+		public void ReturnToPool()
+		{
+			_rigidbody.velocity = Vector2.zero;
+			gameObject.SetActive(false);
+		}
+
+		public void ActivateFromPool()
+		{
+			CurrentHealth = MaxHealth;
+			gameObject.SetActive(true);
 		}
 	}
 }
