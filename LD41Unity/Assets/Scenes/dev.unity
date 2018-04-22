@@ -190,6 +190,8 @@ MonoBehaviour:
     type: 2}
   BulletPrefab: {fileID: 1382019540769852, guid: 351e47c03a7d92647a3d500737b7646b,
     type: 2}
+  ParticlePrefab: {fileID: 1325401977203686, guid: 7c13b16332353b74b8ee2d838f9e1366,
+    type: 2}
 --- !u!4 &110813919
 Transform:
   m_ObjectHideFlags: 0

@@ -259,8 +259,8 @@ Player 4:
 			playerInput.HorizontalAim = inputDevice.RightStick.X;
 			playerInput.VerticalAim = inputDevice.RightStick.Y;
 
-			playerInput.Jump = inputDevice.LeftTrigger.IsPressed;
-			playerInput.Shooting = inputDevice.RightTrigger.IsPressed;
+			playerInput.Jump = inputDevice.LeftBumper.IsPressed;
+			playerInput.Shooting = inputDevice.RightBumper.IsPressed;
 
 			playerInput.Menu = inputDevice.Command.WasPressed;
 			playerInput.Select = inputDevice.Action1.WasPressed;

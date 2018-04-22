@@ -41,15 +41,22 @@ namespace LD41
 			{
 				// Ignore
 			}
-			else if(collision.gameObject.tag == "PlayerBoy")
+			else if (collision.gameObject.tag == "PlayerBoy")
 			{
 				collision.gameObject.GetComponent<PlayerCharacter>().TakeDamageFrom(Player);
 				GameManager.Instance.ReturnBullet(this);
+				Particulate(collision.GetContact(0).point);
 			}
 			else
 			{
 				GameManager.Instance.ReturnBullet(this);
 			}
+		}
+
+		private void Particulate(Vector2 position)
+		{
+			var particles = (ParticlePoolable)GameManager.Instance.GetParticles();
+			particles.transform.position = position;
 		}
 	}
 }

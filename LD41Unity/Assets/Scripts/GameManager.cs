@@ -34,6 +34,7 @@ namespace LD41
 		public Object RoomPrefab;
 		public Object EnemyPrefab;
 		public Object BulletPrefab;
+		public Object ParticlePrefab;
 
 		private MetroidCamera _camera;
 
@@ -43,6 +44,7 @@ namespace LD41
 		private List<Room> _roomsObjects = new List<Room>();
 		private Room _currentRoom;
 
+		private ObjectPool _particlePool;
 		private ObjectPool _projectilePool;
 		private ObjectPool _enemyPool;
 
@@ -120,6 +122,18 @@ namespace LD41
 				return poolable;
 			});
 			_enemyPool.AllocateObjects(30);
+
+			var particlePoolObject = new GameObject("Particle Object Pool");
+			_particlePool = particlePoolObject.AddComponent<ObjectPool>();
+			_particlePool.SetAllocationFunction(() =>
+			{
+				var gObj = (GameObject)Instantiate(ParticlePrefab, _particlePool.transform);
+				gObj.name = "Particle Object";
+				var poolable = gObj.GetComponent<IPoolableObject>();
+				poolable.ReturnToPool();
+				return poolable;
+			});
+			_particlePool.AllocateObjects(8);
 		}
 
 		public IPoolableObject GetBullet()
@@ -130,6 +144,16 @@ namespace LD41
 		public void ReturnBullet(IPoolableObject bullet)
 		{
 			_projectilePool.ReturnObjectToPool(bullet);
+		}
+
+		public IPoolableObject GetParticles()
+		{
+			return _particlePool.GetObjectFromPool();
+		}
+
+		public void ReturnParticles(IPoolableObject poolable)
+		{
+			_particlePool.ReturnObjectToPool(poolable);
 		}
 
 		public void ResetGame()

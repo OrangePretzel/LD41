@@ -83,26 +83,6 @@ namespace LD41
 				transform.localRotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
 			}
 
-			if (playerInput.Jump)
-			{
-				var velocity = _rigidbody.velocity;
-				velocity += (Vector2)transform.up * AccelerationPerSecond * CONST.PIXELS_PER_UNIT;
-
-				var maxSpeed = MaxSpeed * CONST.PIXELS_PER_UNIT;
-				if (velocity.sqrMagnitude > maxSpeed * maxSpeed)
-				{
-					velocity = velocity.normalized * maxSpeed;
-				}
-
-				_rigidbody.velocity = velocity;
-
-				ParticleSystem.Emit(1);
-				_animator.SetBool("moving", true);
-			}
-			else
-			{
-				_animator.SetBool("moving", false);
-			}
 
 			var aimVec = playerInput.GetNormalizedAim(transform.position, Camera.main);
 			if (aimVec.x != 0 || aimVec.y != 0)
@@ -130,21 +110,44 @@ namespace LD41
 					bullet.transform.position = ShootiePoint.position;
 					bullet.SetDir(GunArmSprite.transform.right);
 					bullet.Player = this;
+					_rigidbody.velocity += (Vector2)GunArmSprite.transform.right * -CONST.PIXELS_PER_UNIT;
+
 				}
+			}
+
+			if (playerInput.Jump)
+			{
+				var velocity = _rigidbody.velocity;
+				velocity += (Vector2)transform.up * AccelerationPerSecond * CONST.PIXELS_PER_UNIT;
+
+				var maxSpeed = MaxSpeed * CONST.PIXELS_PER_UNIT;
+				if (velocity.sqrMagnitude > maxSpeed * maxSpeed)
+				{
+					velocity = velocity.normalized * maxSpeed;
+				}
+
+				_rigidbody.velocity = velocity;
+
+				ParticleSystem.Emit(1);
+				_animator.SetBool("moving", true);
+			}
+			else
+			{
+				_animator.SetBool("moving", false);
 			}
 
 			// Aim Bar
 			var hits = Physics2D.RaycastAll(ShootiePoint.position, GunArmSprite.transform.right, 1000);
-			if(hits.Length >0)
-			foreach (var hit in hits)
-			{
-				if (hit.collider.gameObject == this.gameObject) continue;
-				if (hit.collider.gameObject.tag == "shooties") continue;
+			if (hits.Length > 0)
+				foreach (var hit in hits)
+				{
+					if (hit.collider.gameObject == this.gameObject) continue;
+					if (hit.collider.gameObject.tag == "shooties") continue;
 
-				var hitDist = hit.distance;
-				AimBar.rectTransform.localScale = new Vector3(hitDist / 1000f, 1, 1);
-				break;
-			}
+					var hitDist = hit.distance;
+					AimBar.rectTransform.localScale = new Vector3(hitDist / 1000f, 1, 1);
+					break;
+				}
 			else
 			{
 				AimBar.rectTransform.localScale = new Vector3(1, 1, 1);
