@@ -5,7 +5,7 @@ namespace LD41
 {
 	public class PlayerIcon : MonoBehaviour
 	{
-		public Image MyImage;
+		public SpriteRenderer MyImage;
 
 		[SerializeField]
 		private Color OGColor;
