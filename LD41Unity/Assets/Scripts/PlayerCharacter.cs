@@ -75,10 +75,15 @@ namespace LD41
 			{
 				Die(damageCauser);
 			}
+			else
+			{
+				GameManager.Instance.PlaySound("hurt");
+			}
 		}
 
 		public void Die(PlayerCharacter murderer)
 		{
+			GameManager.Instance.PlaySound("death");
 			GameManager.Instance.AddScoreFor(murderer);
 			GameManager.Instance.RespawnPlayer(this);
 			gameObject.SetActive(false);
@@ -126,6 +131,7 @@ namespace LD41
 				{
 					lastDash = Time.time + DashDuration;
 					IsDashing = true;
+					GameManager.Instance.PlaySound("superthrusty");
 				}
 
 				var aimVec = playerInput.GetNormalizedAim(transform.position, Camera.main);
@@ -156,7 +162,7 @@ namespace LD41
 						bullet.Player = this;
 						_rigidbody.velocity += (Vector2)GunArmSprite.transform.right * -CONST.PIXELS_PER_UNIT;
 						bullet.gameObject.layer = gameObject.layer;
-
+						GameManager.Instance.PlaySound("shootie");
 					}
 				}
 
@@ -223,6 +229,8 @@ namespace LD41
 				}
 
 				IsDashing = false;
+
+				GameManager.Instance.PlaySound("collide");
 			}
 		}
 	}

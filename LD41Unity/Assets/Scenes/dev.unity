@@ -292,7 +292,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainMenuSong: {fileID: 1519507799}
   GameSong: {fileID: 1108858715}
-  AudioClips: []
+  AudioClips:
+  - {fileID: 8300000, guid: 346595b41e1169b4aa98dd8085f5d8c4, type: 3}
+  - {fileID: 8300000, guid: 964b38490b87dc44cbd537a8b04f6d6e, type: 3}
+  - {fileID: 8300000, guid: 9ffc89c7b5607cb459f4b855b75a8a6b, type: 3}
+  - {fileID: 8300000, guid: a1fa1229ccffa384a8e99a1be32d4443, type: 3}
+  - {fileID: 8300000, guid: 814bec16d7a30a949aa1bed26c69aede, type: 3}
+  - {fileID: 8300000, guid: fd5b23edb48965541a2cc66301d6092e, type: 3}
+  - {fileID: 8300000, guid: 3ef5d3246c71d0940b76fdbaa7e1dffa, type: 3}
+  - {fileID: 8300000, guid: 2fffd0f110bcf3b42850f530be8835bf, type: 3}
+  - {fileID: 8300000, guid: d3983a92dd0cd7143a4ce687105c1b24, type: 3}
+  - {fileID: 8300000, guid: 9c17f065588042546b4e5feef147b16b, type: 3}
+  AudioClipIDS:
+  - death
+  - shootie
+  - hurt
+  - superthrusty
+  - spawn
+  - collide
+  - three
+  - two
+  - one
+  - go
   AudioPlayers:
   - {fileID: 1532328916}
   - {fileID: 746761998}
@@ -2359,7 +2380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550, y: -203.33333}
+  m_AnchoredPosition: {x: 550, y: -203.33331}
   m_SizeDelta: {x: 1000, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &721833992
@@ -4036,9 +4057,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ed1ab384e0b0e4c4bb35e8e4e77092c9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b0cc4ddc15077db4dbe75270009dcd4d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0

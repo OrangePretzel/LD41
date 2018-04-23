@@ -31,16 +31,21 @@ namespace LD41
 		}
 
 		public List<AudioClip> AudioClips;
+		public List<string> AudioClipIDS;
 		public AudioSource[] AudioPlayers;
 
-		public void PlaySound(int id)
+		public void PlaySound(string id, float minPitch = 0.75f, float maxPitch = 1.25f)
 		{
 			var audioPlayer = AudioPlayers.FirstOrDefault(p => !p.isPlaying);
 			if (audioPlayer != null)
 			{
-				audioPlayer.clip = AudioClips[id];
-				audioPlayer.pitch = Random.Range(0.75f, 1.25f);
-				audioPlayer.Play();
+				var index = AudioClipIDS.IndexOf(id);
+				if (index >= 0)
+				{
+					audioPlayer.clip = AudioClips[index];
+					audioPlayer.pitch = Random.Range(minPitch, maxPitch);
+					audioPlayer.Play();
+				}
 			}
 		}
 
@@ -443,7 +448,7 @@ namespace LD41
 			for (int i = 0; i < 4; i++)
 			{
 				if (GamSetts.PlayersEnabled[i])
-					SpawnPlayerOnTeam(i, GamSetts.PlayerTeams[i]);
+					SpawnPlayerOnTeam(i, GamSetts.PlayerTeams[i], false);
 			}
 			ChangeState(GameState.Playing);
 		}
@@ -461,13 +466,17 @@ namespace LD41
 		public IEnumerator CountdownTimer()
 		{
 			CountDown.text = "3";
+			GameManager.Instance.PlaySound("three");
 			yield return new WaitForSecondsRealtime(1);
 			CountDown.text = "2";
+			GameManager.Instance.PlaySound("two");
 			yield return new WaitForSecondsRealtime(1);
 			CountDown.text = "1";
+			GameManager.Instance.PlaySound("one");
 			yield return new WaitForSecondsRealtime(1);
 			CountDown.text = "Go!";
 			Time.timeScale = 1;
+			GameManager.Instance.PlaySound("go");
 			yield return new WaitForSecondsRealtime(1);
 			CountDown.text = "";
 		}
@@ -645,7 +654,7 @@ namespace LD41
 			_camera.TransitionToRoom(CurrentRoom);
 		}
 
-		public void SpawnPlayerOnTeam(int playerID, int teamID)
+		public void SpawnPlayerOnTeam(int playerID, int teamID, bool playSound = true)
 		{
 			Vector2 spawnPos = CurrentRoom.DetailedRoomInfo.Spawns[Random.Range(0, CurrentRoom.DetailedRoomInfo.Spawns.Count)];
 			spawnPos *= CONST.PIXELS_PER_UNIT / 2;
@@ -657,6 +666,7 @@ namespace LD41
 			player.transform.position = (Vector3)spawnPos + CurrentRoom.transform.position;
 			player.CurrentHealth = player.MaxHealth;
 			Players.Add(player);
+			if (playSound) PlaySound("spawn");
 		}
 
 		public void ReturnPlayer(IPoolableObject poolable)
