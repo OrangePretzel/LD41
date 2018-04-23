@@ -123,7 +123,7 @@ namespace LD41
 				"Powerful_Sun",
 				"Snake_Pinch",
 				"Substantial_Swim",
-				"Succinct_Applicance",
+				"Succinct_Appliance",
 				"Tough_Drip"
 			};
 		}
@@ -232,11 +232,30 @@ namespace LD41
 				ScoreThings[i].UpdateScore(TeamScores[i]);
 		}
 
+		public void Resume()
+		{
+			ChangeState(GameState.Playing);
+		}
+
+		public void QuitToMM()
+		{
+			ResetGame();
+			GOTOMainMenu();
+		}
+
 		private void Update()
 		{
 			if (_gameState == GameState.Playing)
 			{
 				UpdateScores();
+				for (int i = 0; i < 4; i++)
+				{
+					var input = InputHelper.GetPlayerInput(i);
+					if (input.Menu)
+					{
+						ChangeState(GameState.Paused);
+					}
+				}
 			}
 			else if (_gameState == GameState.CharSel)
 			{
