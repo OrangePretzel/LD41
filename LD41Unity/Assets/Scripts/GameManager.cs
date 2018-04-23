@@ -30,6 +30,20 @@ namespace LD41
 			GamSetties
 		}
 
+		public List<AudioClip> AudioClips;
+		public AudioSource[] AudioPlayers;
+
+		public void PlaySound(int id)
+		{
+			var audioPlayer = AudioPlayers.FirstOrDefault(p => !p.isPlaying);
+			if (audioPlayer != null)
+			{
+				audioPlayer.clip = AudioClips[id];
+				audioPlayer.pitch = Random.Range(0.75f, 1.25f);
+				audioPlayer.Play();
+			}
+		}
+
 		public Canvas MainMenu;
 		public Canvas CharSelect;
 		public Canvas GamSettiesScreen;
@@ -38,6 +52,7 @@ namespace LD41
 
 		public Button StartButt;
 		public Text MapName;
+		public Text ScoreToWinText;
 
 		public Text CountDown;
 		public ScoreThings[] ScoreThings;
@@ -155,6 +170,7 @@ namespace LD41
 		public void UpdateGameSettyScreen()
 		{
 			MapName.text = AllMaps[GamSetts.MapIndex].Replace("_", " ");
+			ScoreToWinText.text = $"{GamSetts.WinningScore} x (# of team members)";
 		}
 
 		public void UpdatePlayerIcons()
@@ -248,6 +264,12 @@ namespace LD41
 		}
 
 		public string GamSettiesKey = "Map";
+
+		public void ScoreToWinChange(int change)
+		{
+			GamSetts.WinningScore += change;
+			GamSetts.WinningScore = Mathf.Clamp(GamSetts.WinningScore, 1, 10);
+		}
 
 		private void Update()
 		{
