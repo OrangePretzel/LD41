@@ -16,9 +16,9 @@ Our game is a zany mashup of an arena shooter and uh... nothing... (That counts 
 
 Thrust yourself through ten space arenas all while destroying up to three of your friends!
 
-Controls (Use MB+M or Controllers!:
-- W or left bumper to thrust up
-- A and D or left stick to rotate
-- Mouse or right stick to aim
-- Left click or right bumper to shoot
-- Shift or "A" button to boost (also does damage!)
+Controls (Controller works best):
+- Left bumper or W to thrust up
+- Left stick or A and D to rotate
+- Right stick or mouse to aim
+- Right bumper or left click to shoot
+- Right trigger or shift button to boost (also does damage!)
