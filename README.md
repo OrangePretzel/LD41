@@ -1,3 +1,4 @@
+![](LD41Assets/Graphics/gametitle.png)
 
 **Thrust yourself through ten space arenas all while destroying up to three of your friends!**
 Our game is a zany mashup of an arena shooter and uh... nothing... (That counts as incompatible, right?)
