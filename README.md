@@ -1,5 +1,7 @@
 ![](LD41Assets/Graphics/gametitle.png)
 
+# [Play Lazernauts now!](https://sevensidedvoxel.itch.io/lazernauts)
+
 **Thrust yourself through ten space arenas all while destroying up to three of your friends!**
 Our game is a zany mashup of an arena shooter and uh... nothing... (That counts as incompatible, right?)
 Created for [Ludum Dare 41 (Jam)](https://ldjam.com/events/ludum-dare/41/). Theme: **Combine 2 Incompatible Genres**
