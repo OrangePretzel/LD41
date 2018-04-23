@@ -12,6 +12,7 @@ namespace LD41
 			public bool[] PlayersEnabled;
 			public int[] PlayerTeams;
 			public int MapIndex;
+			public int WinningScore;
 		}
 		public GameSettings GamSetts;
 		private List<string> AllMaps = new List<string>();
@@ -33,6 +34,9 @@ namespace LD41
 
 		public Button StartButt;
 		public Text MapName;
+
+		public Text CountDown;
+		public ScoreThings[] ScoreThings;
 
 		public PlayerIcon[] PIcons;
 		public Vector3[] PIconTeamLocations;
@@ -93,11 +97,15 @@ namespace LD41
 			GamSetts.PlayersEnabled = new bool[4];
 			GamSetts.PlayerTeams = new int[4];
 			GamSetts.MapIndex = 0;
+			GamSetts.WinningScore = 3;
+
+			TeamScores = new int[4];
 
 			for (int i = 0; i < 4; i++)
 			{
 				GamSetts.PlayersEnabled[i] = false;
 				GamSetts.PlayerTeams[i] = 0;
+				TeamScores[i] = 0;
 			}
 
 			UpdatePlayerIcons();
@@ -218,9 +226,19 @@ namespace LD41
 			Gizmos.color = Color.white;
 		}
 
+		public void UpdateScores()
+		{
+			for (int i = 0; i < 4; i++)
+				ScoreThings[i].UpdateScore(TeamScores[i]);
+		}
+
 		private void Update()
 		{
-			if (_gameState == GameState.CharSel)
+			if (_gameState == GameState.Playing)
+			{
+				UpdateScores();
+			}
+			else if (_gameState == GameState.CharSel)
 			{
 				for (int i = 0; i < 4; i++)
 				{
@@ -294,12 +312,14 @@ namespace LD41
 		{
 			bool hasPlayer = false;
 			bool allAss = true;
+			HashSet<int> teams = new HashSet<int>();
 			for (int i = 0; i < 4; i++)
 			{
 				hasPlayer |= GamSetts.PlayersEnabled[i];
 				allAss &= (!GamSetts.PlayersEnabled[i] || GamSetts.PlayerTeams[i] != -1);
+				teams.Add(GamSetts.PlayerTeams[i]);
 			}
-			return hasPlayer && allAss;
+			return hasPlayer && allAss && teams.Count > 1;
 		}
 
 		public void StartGame()
@@ -334,6 +354,20 @@ namespace LD41
 			ChangeState(GameState.CharSel);
 		}
 
+		public IEnumerator CountdownTimer()
+		{
+			CountDown.text = "3";
+			yield return new WaitForSecondsRealtime(1);
+			CountDown.text = "2";
+			yield return new WaitForSecondsRealtime(1);
+			CountDown.text = "1";
+			yield return new WaitForSecondsRealtime(1);
+			CountDown.text = "Go!";
+			Time.timeScale = 1;
+			yield return new WaitForSecondsRealtime(1);
+			CountDown.text = "";
+		}
+
 		public void ChangeState(GameState newState)
 		{
 			_gameState = newState;
@@ -342,9 +376,9 @@ namespace LD41
 
 			if (_gameState == GameState.Playing)
 			{
-				Time.timeScale = 1;
 				CurrentRoom.gameObject.SetActive(true);
 				_camera.TransitionToRoom(CurrentRoom);
+				StartCoroutine(CountdownTimer());
 			}
 			else
 			{
@@ -360,9 +394,28 @@ namespace LD41
 			PauseMenu.gameObject.SetActive(_gameState == GameState.Paused);
 		}
 
+		public IEnumerator OnWinThings()
+		{
+			yield return new WaitForSecondsRealtime(2);
+			ResetGame();
+			GOTOMainMenu();
+		}
+
 		public void AddScoreFor(PlayerCharacter murderer)
 		{
-			Debug.Log($"{murderer.name} is a murderer! +1 for Team {murderer.TeamID}");
+			TeamScores[murderer.TeamID]++;
+
+			if (TeamScores[murderer.TeamID] >= GamSetts.WinningScore)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (i == murderer.TeamID)
+						ScoreThings[i].Win();
+					else
+						ScoreThings[i].Lose();
+				}
+				StartCoroutine(OnWinThings());
+			}
 		}
 
 		public IEnumerator RespawnPlayerAfterDelay(int playerID, int teamID)
@@ -447,6 +500,8 @@ namespace LD41
 			_particlePool.ReturnObjectToPool(poolable);
 		}
 
+		public int[] TeamScores;
+
 		public void ResetGame()
 		{
 			foreach (var poolable in _roomsObjects)
@@ -454,6 +509,11 @@ namespace LD41
 			_roomsObjects.Clear();
 
 			ResetPlayers();
+
+			for (int i = 0; i < 4; i++)
+			{
+				TeamScores[i] = 0;
+			}
 		}
 
 		public void ResetPlayers()

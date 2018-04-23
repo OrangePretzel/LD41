@@ -176,7 +176,6 @@ namespace LD41
 						switch (templateChar)
 						{
 							case '@':
-								Debug.Log($"Adding spawn at {i} {j}");
 								detailedRoomInfo.Spawns.Add(new Vector2Int(i, j));
 								break;
 							case 'X':
