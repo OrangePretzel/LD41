@@ -351,10 +351,10 @@ namespace LD41
 			}
 			else
 			{
-				ResetPlayers();
 				ShouldContinue = false;
 			}
 
+			ResetPlayers();
 			for (int i = 0; i < 4; i++)
 			{
 				if (GamSetts.PlayersEnabled[i])
