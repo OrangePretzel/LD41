@@ -28,6 +28,7 @@ Created for [Ludum Dare 41 (Jam)](https://ldjam.com/events/ludum-dare/41/). Them
 - Art: [PyxelEdit](http://pyxeledit.com/)
 - Art: [Photoshop](https://www.adobe.com/products/photoshop.html)
 - Art: [Paint.NET](https://www.getpaint.net/download.html)
+- Art: [PaintTool SAI](https://www.systemax.jp/en/sai/)
 - Source Control: [Git](https://git-scm.com/)
 - Programming: [Visual Studio Community](https://www.visualstudio.com/vs/community/)
 - Programming: [Visual Studio Code](https://code.visualstudio.com/)
