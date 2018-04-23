@@ -27,23 +27,20 @@ namespace LD41
 			TeamID = teamID;
 			PlayerID = playerID;
 
-			MyImage.color = Enab ? OGColor : OGColor * 0.75f;
+			//MyImage.color = Enab ? OGColor : OGColor * 0.75f;
 			MyImage.transform.localScale = Enab ? Vector3.one : new Vector3(0.5f, 0.5f, 1f);
 			if (TeamID == -1)
 				targetPos = Vector3.zero;
 			else
 				targetPos = GameManager.Instance.PIconTeamLocations[TeamID];
 
+			targetPos.z = 0;
 			var diff = targetPos - transform.position;
 			if (diff.sqrMagnitude > 4)
 				transform.position += diff * Time.unscaledDeltaTime * 10;
 			else
 				transform.position = targetPos;
-		}
-
-		private void LateUpdate()
-		{
-			transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+			//transform.position = new Vector3(transform.position.x, transform.position.y);
 		}
 	}
 }
