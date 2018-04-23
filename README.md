@@ -26,7 +26,6 @@ Created for [Ludum Dare 41 (Jam)](https://ldjam.com/events/ludum-dare/41/). Them
 - Game Engine: [Unity](https://unity3d.com/)
 - Music: [LMMS](https://lmms.io/)
 - Art: [PyxelEdit](http://pyxeledit.com/)
-- Art: [Photoshop](https://www.adobe.com/products/photoshop.html)
 - Art: [Paint.NET](https://www.getpaint.net/download.html)
 - Art: [PaintTool SAI](https://www.systemax.jp/en/sai/)
 - Source Control: [Git](https://git-scm.com/)
