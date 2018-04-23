@@ -75,7 +75,6 @@ namespace LD41
 		public void SetRoomInfo(DetailedRoomInfo roomInfo)
 		{
 			DetailedRoomInfo = roomInfo;
-			transform.position = new Vector3(roomInfo.RoomInfo.Position.x * 21 * CONST.PIXELS_PER_UNIT, roomInfo.RoomInfo.Position.y * 17 * CONST.PIXELS_PER_UNIT, 0);
 		}
 	}
 }

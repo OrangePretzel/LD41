@@ -20,10 +20,10 @@ TagManager:
   - players
   - baddies
   - 
-  - 
-  - 
-  - 
-  - 
+  - team0
+  - team1
+  - team2
+  - team3
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foregs
+    uniqueID: 2552262597
     locked: 0

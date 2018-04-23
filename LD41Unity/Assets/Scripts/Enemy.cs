@@ -40,7 +40,7 @@ namespace LD41
 
 		public void Die()
 		{
-			GameManager.Instance.ReturnEnemy(this);
+			//GameManager.Instance.ReturnEnemy(this);
 		}
 	}
 }

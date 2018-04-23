@@ -138,11 +138,13 @@ namespace LD41
 	{
 		public RoomInfo RoomInfo;
 		public LevelTile[,] RoomLayout;
+		public List<Vector2Int> Spawns;
 
 		public DetailedRoomInfo(RoomInfo roomInfo, int width, int height)
 		{
 			RoomInfo = roomInfo;
 			RoomLayout = new LevelTile[width, height];
+			Spawns = new List<Vector2Int>();
 		}
 	}
 
@@ -155,10 +157,10 @@ namespace LD41
 		private static bool IsBoundary(int x, int y) => x == 0 || x == ROOM_WIDTH - 1 || y == 0 || y == ROOM_HEIGHT - 1;
 		private static bool IsDoorPosition(int x, int y) => IsBoundary(x, y) && ((x == ROOM_WIDTH / 2 || x == ROOM_WIDTH / 2 - 1) || (y == ROOM_HEIGHT / 2 || y == ROOM_HEIGHT / 2 - 1));
 
-		public static DetailedRoomInfo GenerateRoom(RoomInfo roomInfo)
+		public static DetailedRoomInfo GenerateRoom(RoomInfo roomInfo, string mapName)
 		{
 			var detailedRoomInfo = new DetailedRoomInfo(roomInfo, ROOM_WIDTH, ROOM_HEIGHT);
-			var template = ChooseRandomTemplate(detailedRoomInfo);
+			var template = ChooseRandomTemplate(mapName);
 
 			for (int j = 0; j < ROOM_HEIGHT; j++)
 				for (int i = 0; i < ROOM_WIDTH; i++)
@@ -173,6 +175,9 @@ namespace LD41
 						var templateChar = template[j * ROOM_WIDTH + i];
 						switch (templateChar)
 						{
+							case '@':
+								detailedRoomInfo.Spawns.Add(new Vector2Int(i, j));
+								break;
 							case 'X':
 								tile.Type = LevelTile.TileTypes.Wall;
 								break;
@@ -188,15 +193,9 @@ namespace LD41
 			return detailedRoomInfo;
 		}
 
-		public static string ChooseRandomTemplate(DetailedRoomInfo roomInfo)
+		public static string ChooseRandomTemplate(string mapName)
 		{
-			List<string> possibleTemplates = new List<string>();
-			possibleTemplates.AddRange(LEVEL_TEMPLATES["0000"]);
-			var key = $"{(roomInfo.RoomInfo.HasConnectionRight ? 1 : 0)}{(roomInfo.RoomInfo.HasConnectionTop ? 1 : 0)}{(roomInfo.RoomInfo.HasConnectionLeft ? 1 : 0)}{(roomInfo.RoomInfo.HasConnectionDown ? 1 : 0)}";
-			possibleTemplates.AddRange(LEVEL_TEMPLATES[key]);
-			var template = possibleTemplates[Random.Range(0, possibleTemplates.Count)];
-
-			var asset = Resources.Load<TextAsset>($"RoomTemplates\\{template}");
+			var asset = Resources.Load<TextAsset>($"RoomTemplates\\{mapName}");
 			return asset.text.Replace("\n", "").Replace("\r", "").Replace(" ", "");
 		}
 

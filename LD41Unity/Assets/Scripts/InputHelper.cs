@@ -77,7 +77,7 @@ namespace LD41
 
 		private void OnGUI()
 		{
-			const bool DEBUG_GUI = true;
+			const bool DEBUG_GUI = false;
 			if (DEBUG_GUI)
 			{
 				GUI.Label(new Rect(0, 0, 1000, 1000), $@"
@@ -293,7 +293,6 @@ Player 4:
 			var aimVec = (screenCamera.ScreenToWorldPoint(new Vector3(HorizontalAim, VerticalAim)) - originPoint);
 			aimVec.z = 0;
 			aimVec = aimVec.normalized;
-			Debug.Log($"Normalized Aim Vector = {aimVec}");
 			return aimVec;
 		}
 

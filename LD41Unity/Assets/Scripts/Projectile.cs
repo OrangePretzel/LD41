@@ -43,7 +43,9 @@ namespace LD41
 			}
 			else if (collision.gameObject.tag == "PlayerBoy")
 			{
-				collision.gameObject.GetComponent<PlayerCharacter>().TakeDamageFrom(Player);
+				var player = collision.gameObject.GetComponent<PlayerCharacter>();
+				if (player.TeamID == Player.TeamID) return; // Same team
+				player.TakeDamageFrom(Player);
 				GameManager.Instance.ReturnBullet(this);
 				Particulate(collision.GetContact(0).point);
 			}
