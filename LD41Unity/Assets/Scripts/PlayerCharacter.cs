@@ -13,6 +13,9 @@ namespace LD41
 		[SerializeField]
 		private SpriteRenderer BodySprite;
 
+		[SerializeField]
+		private Image LaserSight;
+
 		public Transform ShootiePoint;
 
 		public float RotationPerSecond = 2;
@@ -32,6 +35,11 @@ namespace LD41
 		private Image HPBar;
 
 		[SerializeField]
+		private Image DashMeter;
+		[SerializeField]
+		private Image DashBar;
+
+		[SerializeField]
 		private Image AimBar;
 
 		public float ShotCoolDown = 0.5f;
@@ -45,9 +53,10 @@ namespace LD41
 			PlayerID = playerID;
 			TeamID = teamID;
 
-			var customColor = ((playerID / 4f) * 0.25f + 0.75f) * teamColor;
+			var customColor = ((playerID / 4f) * 0.5f + 0.5f) * teamColor;
 
 			BodySprite.color = customColor;
+			LaserSight.color = customColor;
 			gameObject.layer = LayerMask.NameToLayer($"team{TeamID}");
 		}
 
@@ -58,9 +67,9 @@ namespace LD41
 			UpdateHealthBar();
 		}
 
-		public void TakeDamageFrom(PlayerCharacter damageCauser)
+		public void TakeDamageFrom(PlayerCharacter damageCauser, float amount = 1)
 		{
-			CurrentHealth--;
+			CurrentHealth -= amount;
 			UpdateHealthBar();
 			if (CurrentHealth <= 0)
 			{
@@ -80,6 +89,12 @@ namespace LD41
 			HPBar.rectTransform.localScale = new Vector3(CurrentHealth / (float)MaxHealth, 1, 1);
 		}
 
+		public float lastDash;
+		public float DashDuration = 0.5f;
+		public float DashCooldown = 2f;
+		public bool CanDash => (Time.time - lastDash) > DashCooldown;
+		public float DashSpeed = 10f;
+		public bool IsDashing;
 		private void Update()
 		{
 			if (GameManager.IsGamePaused) return;
@@ -87,66 +102,84 @@ namespace LD41
 			// Get input associated with the player's controller
 			playerInput = InputHelper.GetPlayerInput(PlayerID);
 
-			if (playerInput.HorizontalMovement != 0)
+			if (IsDashing)
 			{
-				_rigidbody.angularVelocity = 0;
-				var amountToRotate = -playerInput.HorizontalMovement * RotationPerSecond * Time.deltaTime;
-				var newAngle = transform.localRotation.eulerAngles.z + amountToRotate;
-				transform.localRotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
-			}
-
-
-			var aimVec = playerInput.GetNormalizedAim(transform.position, Camera.main);
-			if (aimVec.x != 0 || aimVec.y != 0)
-			{
-				GunArmSprite.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg);
-				var gangle = GunArmSprite.transform.localEulerAngles.z;
-				if (gangle >= 90 && gangle <= 270)
-				{
-					BodySprite.transform.localScale = new Vector3(-1, 1, 1);
-					GunArmSprite.transform.localScale = new Vector3(1, -1, 1);
-				}
-				else
-				{
-					BodySprite.transform.localScale = new Vector3(1, 1, 1);
-					GunArmSprite.transform.localScale = new Vector3(1, 1, 1);
-				}
-			}
-
-			if (playerInput.Shooting)
-			{
-				if (Time.time - _lastShot > ShotCoolDown)
-				{
-					_lastShot = Time.time;
-					var bullet = (Projectile)GameManager.Instance.GetBullet();
-					bullet.transform.position = ShootiePoint.position;
-					bullet.SetDir(GunArmSprite.transform.right);
-					bullet.Player = this;
-					_rigidbody.velocity += (Vector2)GunArmSprite.transform.right * -CONST.PIXELS_PER_UNIT;
-					bullet.gameObject.layer = gameObject.layer;
-
-				}
-			}
-
-			if (playerInput.Jump)
-			{
-				var velocity = _rigidbody.velocity;
-				velocity += (Vector2)transform.up * AccelerationPerSecond * CONST.PIXELS_PER_UNIT;
-
-				var maxSpeed = MaxSpeed * CONST.PIXELS_PER_UNIT;
-				if (velocity.sqrMagnitude > maxSpeed * maxSpeed)
-				{
-					velocity = velocity.normalized * maxSpeed;
-				}
-
-				_rigidbody.velocity = velocity;
-
-				ParticleSystem.Emit(1);
+				_rigidbody.velocity = transform.up * DashSpeed * CONST.PIXELS_PER_UNIT;
 				_animator.SetBool("moving", true);
 			}
 			else
 			{
-				_animator.SetBool("moving", false);
+				if (!CanDash)
+				{
+					DashBar.rectTransform.localScale = new Vector3((Time.time - lastDash) / DashCooldown, 1, 1);
+				}
+
+				if (playerInput.HorizontalMovement != 0)
+				{
+					_rigidbody.angularVelocity = 0;
+					var amountToRotate = -playerInput.HorizontalMovement * RotationPerSecond * Time.deltaTime;
+					var newAngle = transform.localRotation.eulerAngles.z + amountToRotate;
+					transform.localRotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
+				}
+
+				if (playerInput.Dashing && CanDash)
+				{
+					lastDash = Time.time + DashDuration;
+					IsDashing = true;
+				}
+
+				var aimVec = playerInput.GetNormalizedAim(transform.position, Camera.main);
+				if (aimVec.x != 0 || aimVec.y != 0)
+				{
+					GunArmSprite.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(aimVec.y, aimVec.x) * Mathf.Rad2Deg);
+					var gangle = GunArmSprite.transform.localEulerAngles.z;
+					if (gangle >= 90 && gangle <= 270)
+					{
+						BodySprite.transform.localScale = new Vector3(-1, 1, 1);
+						GunArmSprite.transform.localScale = new Vector3(1, -1, 1);
+					}
+					else
+					{
+						BodySprite.transform.localScale = new Vector3(1, 1, 1);
+						GunArmSprite.transform.localScale = new Vector3(1, 1, 1);
+					}
+				}
+
+				if (playerInput.Shooting)
+				{
+					if (Time.time - _lastShot > ShotCoolDown)
+					{
+						_lastShot = Time.time;
+						var bullet = (Projectile)GameManager.Instance.GetBullet();
+						bullet.transform.position = ShootiePoint.position;
+						bullet.SetDir(GunArmSprite.transform.right);
+						bullet.Player = this;
+						_rigidbody.velocity += (Vector2)GunArmSprite.transform.right * -CONST.PIXELS_PER_UNIT;
+						bullet.gameObject.layer = gameObject.layer;
+
+					}
+				}
+
+				if (playerInput.Jump)
+				{
+					var velocity = _rigidbody.velocity;
+					velocity += (Vector2)transform.up * AccelerationPerSecond * CONST.PIXELS_PER_UNIT;
+
+					var maxSpeed = MaxSpeed * CONST.PIXELS_PER_UNIT;
+					if (velocity.sqrMagnitude > maxSpeed * maxSpeed)
+					{
+						velocity = velocity.normalized * maxSpeed;
+					}
+
+					_rigidbody.velocity = velocity;
+
+					ParticleSystem.Emit(1);
+					_animator.SetBool("moving", true);
+				}
+				else
+				{
+					_animator.SetBool("moving", false);
+				}
 			}
 
 			// Aim Bar
@@ -177,6 +210,20 @@ namespace LD41
 		{
 			CurrentHealth = MaxHealth;
 			gameObject.SetActive(true);
+		}
+
+		private void OnCollisionEnter2D(Collision2D collision)
+		{
+			if (IsDashing)
+			{
+				if (collision.gameObject.tag == "PlayerBoy"
+					&& collision.gameObject.layer != gameObject.layer)
+				{
+					collision.gameObject.GetComponent<PlayerCharacter>().TakeDamageFrom(this, 2);
+				}
+
+				IsDashing = false;
+			}
 		}
 	}
 }

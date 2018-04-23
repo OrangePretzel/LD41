@@ -16,44 +16,30 @@ namespace LD41
 
 		public void Win()
 		{
-			StartCoroutine(WinAnim());
-		}
-
-		public IEnumerator WinAnim()
-		{
-			BGGround.color = Color.green;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.white;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.green;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.white;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.green;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.white;
-			yield return new WaitForSecondsRealtime(0.25f);
+			StartCoroutine(FlashAnim(Color.green, 3));
 		}
 
 		public void Lose()
 		{
-			StartCoroutine(LoseAnim());
+			StartCoroutine(FlashAnim(Color.red, 3));
 		}
 
-		public IEnumerator LoseAnim()
+		public void ScoreFlash()
 		{
-			BGGround.color = Color.red;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.white;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.red;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.white;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.red;
-			yield return new WaitForSecondsRealtime(0.25f);
-			BGGround.color = Color.white;
-			yield return new WaitForSecondsRealtime(0.25f);
+			StartCoroutine(FlashAnim(Color.yellow, 1));
+		}
+
+		public IEnumerator FlashAnim(Color color, int repeats)
+		{
+			var ogColor = BGGround.color;
+
+			for (int i = 0; i < repeats; i++)
+			{
+				BGGround.color = color;
+				yield return new WaitForSecondsRealtime(0.25f);
+				BGGround.color = ogColor;
+				yield return new WaitForSecondsRealtime(0.25f);
+			}
 		}
 	}
 }

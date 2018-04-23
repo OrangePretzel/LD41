@@ -231,6 +231,7 @@ Player 4:
 
 			playerInput.Jump = Input.GetKey(KeyCode.W);
 			playerInput.Shooting = Input.GetKey(KeyCode.Mouse0);
+			playerInput.Dashing = Input.GetKey(KeyCode.LeftShift);
 
 			var menuDown = Input.GetKey(KeyCode.Escape);
 			playerInput.Menu = !WasMenuDown && menuDown;
@@ -261,6 +262,7 @@ Player 4:
 
 			playerInput.Jump = inputDevice.LeftBumper.IsPressed;
 			playerInput.Shooting = inputDevice.RightBumper.IsPressed;
+			playerInput.Dashing = inputDevice.RightTrigger.IsPressed;
 
 			playerInput.Menu = inputDevice.Command.WasPressed;
 			playerInput.Select = inputDevice.Action1.WasPressed;
@@ -280,6 +282,7 @@ Player 4:
 
 		public bool Jump;
 		public bool Shooting;
+		public bool Dashing;
 
 		public bool Menu;
 		public bool Select;
@@ -304,6 +307,7 @@ Movement: ({HorizontalMovement}, {VerticalMovement})
 Aim: ({HorizontalAim}, {VerticalAim})
 Jump: ({Jump})
 Shooting: ({Shooting})
+Dashing: ({Dashing})
 Menu: ({Menu})
 Select: ({Select})
 Back: ({Back})";

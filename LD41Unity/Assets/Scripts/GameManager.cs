@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,9 @@ namespace LD41
 		}
 		public GameSettings GamSetts;
 		private List<string> AllMaps = new List<string>();
+
+		public AudioSource MainMenuSong;
+		public AudioSource GameSong;
 
 		public enum GameState
 		{
@@ -97,7 +101,7 @@ namespace LD41
 			GamSetts.PlayersEnabled = new bool[4];
 			GamSetts.PlayerTeams = new int[4];
 			GamSetts.MapIndex = 0;
-			GamSetts.WinningScore = 3;
+			GamSetts.WinningScore = 5;
 
 			TeamScores = new int[4];
 
@@ -243,6 +247,8 @@ namespace LD41
 			GOTOMainMenu();
 		}
 
+		public string GamSettiesKey = "Map";
+
 		private void Update()
 		{
 			if (_gameState == GameState.Playing)
@@ -273,6 +279,12 @@ namespace LD41
 							InputHelper.DisconnectPlayerDevice(pInput.PlayerID);
 							continue;
 						}
+					}
+
+					if (pInput.Menu && GamSetts.PlayerTeams[pInput.PlayerID] != -1 && VerifySettings())
+					{
+						GotoGameSetties();
+						break;
 					}
 
 					var movement = new Vector2(pInput.HorizontalMovement, pInput.VerticalMovement);
@@ -307,7 +319,58 @@ namespace LD41
 			}
 			else if (_gameState == GameState.GamSetties)
 			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!GamSetts.PlayersEnabled[i]) continue;
+					var input = InputHelper.GetPlayerInput(i);
+
+					if (Mathf.Abs(input.VerticalMovement) > 0.5f)
+					{
+						ChangeGameSetting(input.VerticalMovement);
+						break;
+					}
+					if (Mathf.Abs(input.HorizontalMovement) > 0.5f)
+					{
+						ChangeGameSettingValue(input.HorizontalMovement);
+						break;
+					}
+				}
+
 				UpdateGameSettyScreen();
+			}
+		}
+
+		public void ChangeGameSetting(float dir)
+		{
+			string[] things = new string[] {
+				"Map",
+				"ScoreToWin",
+			};
+			for (int i = 0; i < things.Length; i++)
+			{
+				if (things[i] == GamSettiesKey)
+				{
+					if (dir > 0) GamSettiesKey = things[(i + 1) % things.Length];
+					else if (dir < 0) GamSettiesKey = things[((i - 1 < 0) ? (things.Length - 1) : (i - 1)) % things.Length];
+					break;
+				}
+			}
+		}
+
+		public void ChangeGameSettingValue(float dir)
+		{
+			switch (GamSettiesKey)
+			{
+				case "Map":
+					if (dir > 0) NextMap();
+					else if (dir < 0) PreviousMap();
+					break;
+				case "ScoreToWin":
+					//if (dir > 0) GamSetts.WinningScore = GamSetts.WinningScore;
+					//else if (dir < 0) PreviousMap();
+					break;
+				default:
+					break;
 			}
 		}
 
@@ -398,12 +461,18 @@ namespace LD41
 				CurrentRoom.gameObject.SetActive(true);
 				_camera.TransitionToRoom(CurrentRoom);
 				StartCoroutine(CountdownTimer());
+
+				if (!GameSong.isPlaying) GameSong.Play();
+				if (MainMenuSong.isPlaying) MainMenuSong.Stop();
 			}
 			else
 			{
 				Time.timeScale = 0;
 				CurrentRoom.gameObject.SetActive(false);
 				_camera.transform.position = new Vector3(0, 0, -10);
+
+				if (!MainMenuSong.isPlaying) MainMenuSong.Play();
+				if (GameSong.isPlaying) GameSong.Stop();
 			}
 
 			MainMenu.gameObject.SetActive(_gameState == GameState.MainMenu);
@@ -424,7 +493,7 @@ namespace LD41
 		{
 			TeamScores[murderer.TeamID]++;
 
-			if (TeamScores[murderer.TeamID] >= GamSetts.WinningScore)
+			if (TeamScores[murderer.TeamID] >= GamSetts.WinningScore * GamSetts.PlayerTeams.Count(t => t == murderer.TeamID))
 			{
 				for (int i = 0; i < 4; i++)
 				{
@@ -434,6 +503,10 @@ namespace LD41
 						ScoreThings[i].Lose();
 				}
 				StartCoroutine(OnWinThings());
+			}
+			else
+			{
+				ScoreThings[murderer.TeamID].ScoreFlash();
 			}
 		}
 
