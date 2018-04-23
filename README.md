@@ -13,7 +13,8 @@ Created for [Ludum Dare 41 (Jam)](https://ldjam.com/events/ludum-dare/41/). Them
 - **Thrust Forward**: Left Bumper
 - **Aim**: Right Stick
 - **Shoot**: Right Bumper
-- **Super Thrust**: Right Trigger (rams enemies and does damage!)
+- **Super Thrust**: "A" Button (rams enemies and does damage!)
+- Note the menus still require the mouse
 
 ## Controls - Keyboard
 - **Rotate**: A and D
