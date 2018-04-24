@@ -28,6 +28,7 @@ Created for [Ludum Dare 41 (Jam)](https://ldjam.com/events/ludum-dare/41/). Them
 ## Tools
 - Game Engine: [Unity](https://unity3d.com/)
 - Music: [LMMS](https://lmms.io/)
+- Sounds: [Audacity](https://www.audacityteam.org/)
 - Art: [PyxelEdit](http://pyxeledit.com/)
 - Art: [Paint.NET](https://www.getpaint.net/download.html)
 - Art: [PaintTool SAI](https://www.systemax.jp/en/sai/)
